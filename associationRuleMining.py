@@ -1,5 +1,5 @@
 import csv
-from itertools import permutations
+from itertools import permutations, combinations
 
 def importCSV(file):
 	with open(file, 'r') as groceries_obj:
@@ -25,7 +25,7 @@ def createItemset(itemList, k):
 		kItemset = []
 		for j in range(1, len(itemList)):
 			if(len(itemList) >= k):
-				tempPermutations = list(permutations(itemList[j], i))
+				tempPermutations = list(combinations(itemList[j], i))
 			#print(list(tempPermutations))
 				for j_ in range(len(tempPermutations)):
 					if(checkExists(tempPermutations[j_], kItemset) == False):
