@@ -40,10 +40,20 @@ def createTransactionFrequency(uniqueItems, transactionList):
 	return T
 
 def intersection(lst1, lst2):
+	#print(lst1)
+	#print(lst2)
     # Use of hybrid method
-    temp = set(lst2)
-    lst3 = [value for value in lst1 if value in temp]
-    return lst3
+	temp = set(lst2)
+	lst3 = [value for value in lst1 if value in temp]
+	return lst3
+
+def intersection2(lst1, lst2):
+	print(lst1)
+	print(lst2)
+    # Use of hybrid method
+	temp = set(lst2)
+	lst3 = [value for value in lst1 if value in temp]
+	return lst3
 
 def compareLists(L1, L2):
 	return(collections.Counter(L1) == collections.Counter(L2))
@@ -59,7 +69,7 @@ def checkDuplicates(P, T):
 					listOfJays.append(j)
 	#print(listOfJays)
 	#27065, 8048
-	print(P[7880], P[27065], P[8048], P[27066])
+	#print(P[7880], P[27065], P[8048], P[27066])
 	for i in range(len(listOfJays)):
 		#del T[listOfJays[i]]
 		#del P[listOfJays[i]]
@@ -80,14 +90,27 @@ def getLevels(R,L,k):
 	for n in range(1,len(R)-1):
 		for i in range(len(R[n])):
 			for j in range(len(R[1])):
-				if(R[n][i].find(R[1][j]) == -1): # Fix this to work with lists
-					New = intersection(L[n][i], L[1][j])
+				#if(R[n][i].find(R[1][j]) == -1): # Fix this to work with lists
+				if((R[1][j] in R[n][i]) == False):
+					if(n == 1):
+						New = intersection(L[n][i], L[1][j])
+					else:
+						print(n)
+						print(R[1][j])
+						print(R[n][i])
+						New = intersection2(L[n][i], L[1][j])
 					#print(New)
 					if(len(New) >=k):
 						if(n == 1):
+							#x = int(input("DOES THIS EVER HIT"))
 							R[n+1].append([R[n][i], R[1][j]])
-						else:
-							R[n+1].append(R[n][i]+R[1][j])
+							#print(R[n+1][-1])
+						else: # R[n][i] = [apple, orange]  R[1][j] = 'banana' # [['apple', 'orange'], 'banana']
+							#x = int(input("how bout this"))
+							temp = R[n][i]
+							temp.append(R[1][j])
+							R[n+1].append(temp)
+							#print(R[n+1][-1])
 						L[n+1].append(New)
 		checkDuplicates(R[n+1], L[n+1])		
 		print("Level ", n+1, "-->  Length = ", len(R[n+1]) )
@@ -115,7 +138,7 @@ def printList(R, L, T, k):
 	
 
 def main():
-	A = importCSV('groceries.csv')
+	A = importCSV('groceries1.csv')
 	#print(len(A))
 	N = findUniqueItems(A)
 	T = createTransactionFrequency(N, A)
