@@ -78,7 +78,7 @@ def getLevels(R,L,k):
 						L[n+1].append(New)
 		R[n+1], L[n+1] = checkDuplicates(R[n+1], L[n+1])		
 		print("Level ", n+1, "-->  Length = ", len(R[n+1]))
-		#print(R[n+1])
+		print(R[n+1])
 		#print(L[n+1])
 		print("\n")
 
@@ -160,7 +160,31 @@ def main():
 
 	L = [[] for i in range(6)]
 	L[0] = T #First element of L holds the TID's associated with each unique item
-	printList(R,L,T,10)
+	printList(R,L,T,k)
 
 main()
 
+def associationSearch(R, L, s):
+	n = len(s)
+	#check if s exists in level n frequent itemset
+	#if it exists, record the length of the transaction id's that itemset has <=> CHECK EXISTS
+	query = []
+	queryIsFrequent = False
+	queryTransactionCount = 0
+	for i in range(len(R[n])):
+		if(compareLists(s, R[n][i])):
+			query = R[n][i]
+			queryIsFrequent = True
+			queryTransactionCount = len(L[n][i])
+			break
+
+	confidenceCount = []
+	#move up to the next level n+1	
+	for i in range(len(R[n+1])):
+		#check if s exists in that level, if it does't, print no associated item found
+		if(all(item in R[n+1][i] for item in query)):
+			#find all itemsets that have s
+			#record the length of the transaction id's that these itemsets have, calculate confidence
+			confidenceCount.append([R[n+1][i], len(L[n+1][i])/queryTransactionCount])
+
+	print(confidenceCount)	
