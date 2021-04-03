@@ -65,104 +65,48 @@ def checkDuplicates(P, T):
 
 						
 def getLevels(R,L,k):
-	for n in range(1,len(R)-1):
+	n = 1
+	while(1 != 0):
+		tempR = []
+		tempL = []
 		for i in range(len(R[n])):
 			for j in range(len(R[1])):
 				if(checkExists(R[1][j], R[n][i]) == False): # Fix this to work with lists
 					New = intersection(L[n][i], L[1][j])
 					if(len(New) >=k):
 						if(n == 1):
-							R[n+1].append([R[n][i], R[1][j]])
+							tempR.append([R[n][i], R[1][j]])
 						else:
-							R[n+1].append( R[n][i] + [ R[1][j] ] )
-						L[n+1].append(New)
+							tempR.append( R[n][i] + [ R[1][j] ] )
+						tempL.append(New)
+		if(len(tempR)==0):
+			return
+		R.append(tempR)
+		L.append(tempL)
 		R[n+1], L[n+1] = checkDuplicates(R[n+1], L[n+1])		
-		print("Level ", n+1, "-->  Length = ", len(R[n+1]))
+		print("\nLevel ", n+1, "-->  Length = ", len(R[n+1]))
 		print(R[n+1])
-		#print(L[n+1])
 		print("\n")
+		n+=1
 
 
 def printList(R, L, T, k):
-	temp = []
+	tempR = []
+	tempL = []
 	for i in range(len(R[0])):
 		if(len(L[0][i]) >= k):
-			R[1].append(R[0][i])
-			L[1].append(L[0][i])
-			
+			tempR.append(R[0][i])
+			tempL.append(L[0][i])
+	R.append(tempR)
+	L.append(tempL)
 			
 	print("For k = ", k)
 	print("Level 1  -->  Length = ", len(R[1]))
-	#print(R[1])
-	#print(L[1])
+	print(R[1])
 	print("\n")
 	
 	getLevels(R, L, k)
 	
-
-def main():
-	A = importCSV('groceries.csv')
-	
-	k = int(input("Enter Support Percentage: "))
-	k = math.floor(k*len(A)/100)
-
-
-	# 										.;;;..
-	# 									;<!!!!!!!!;
-	# 								.;!!!!!!!!!!!!>
-	# 							.<!!!!!!!!!!!!!!!
-	# 							;!!!!!!!!!!!!!!!!'
-	# 							;!!!!!!!!!!!!!!!!!'
-	# 						;!!!!!!!!!!!!!!!''
-	# 						,!!!!!!!!!!!!!'` .::
-	# 				,;!',;!!!!!!!!!!!'` .::::''  .,,,,.
-	# 				!!!!!!!!!!!!!!!'`.::::' .,ndMMMMMMM,
-	# 				!!!!!!!!!!!!!' .::'' .,nMMP""',nn,`"MMbmnmn,.
-	# 				`!!!!!!!!!!` :'' ,unMMMM" xdMMMMMMMx`MMn
-	# 			_/  `'!!!!''`  ',udMMMMMM" nMMMMM??MMMM )MMMnur=
-	# ,.... ......--~   ,       ,nMMMMMMMMMMnMMP".,ccc, "M MMMMP' ,,
-	# `--......--   _.'        " MMP??4MMMMMP ,c$$$$$$$ ).MMMMnmMMM
-	# 	_.-' _..-~            =".,nmnMMMM .d$$$$$$$$$L MMMMMMMMMP
-	# .--~_.--~                  '.`"4MMMM  $$$$$$$$$$$',MMMMMPPMM
-	# `~~~~                      ,$$$h.`MM   `?$$$$$$$$P dMMMP , P
-	# 						<$""?$ `"     $$$$$$$$',MMMP c$
-	# 						`$c c$h       $$$$$$$',MMMM  $$
-	# 							$$ $$$       $$$$$$',MMMMM  `?
-	# 							`$.`$$$c.   z$???"  "',,`"
-	# 							3h $$$$$cccccccccc$$$$$$$$$$$=r
-	# 							`$c`$$$$$$$$$$$$$$$??$$$$F"$$ "
-	# 						,mr`$c`$$$$$$$$$$$$$$c 3$$$$c$$
-	# 						,mMMMM."$.`?$$$$$$$$$$$$$$$$$$$$$$h,
-	# ;.   .               .uMMMMMMMM "$c,`"$$$$$$$$$$$$$$$$C,,,,cccccc,,..
-	# !!;,;!!!!> .,,...  ,nMMMMMMMMMMM.`?$c  `"?$$$$$$$$$$$$$$$$$$$$$$$$$$$$h.
-	# !!!!!!!!! uMM" <!!',dMMMMMMMMMMPP" ?$h.`::..`""???????""'..  -==cc,"?$$P
-	# !!!!!!!!'.MMP <!',nMMMMMMMMP" .;    `$$c,`'::::::::::::'.$F
-	# !!!!!!!! JMP ;! JMMMMMMMP" .;!!'      "?$hc,.````````'.,$$
-	# !!!!'''' 4M(;',dMMMP""" ,!!!!` ;;!!;.   "?$$$$$?????????"
-	# !!! ::. 4b ,MM" .::: !''`` <!!!!!!!!;
-	# `!::::.`' 4M':::::'',mdP <!!!!!!!!!!!;
-	# ! :::::: ..  :::::: ""'' <!!!!!!!!!!!!!!;
-	# !! ::::::.::: .::::: ;!!> <!!!!!!!!!!!!!!!!!;.
-	# !! :::::: `:'::::::!!' <!!!!!!!!!!!!!!!!!!!!!;;.
-	# ! ::::::' .::::' ;!' .!!!!!!!!!!!!!!'`!!!!!!!!!!!;.
-	# ; `::';!>  ::' ;<!.;!!!!!!!''''!!!!' <!! !!!!!!!!!!!>
-
-	# ------------------------------------------------
-	# Thank you for visiting https://asciiart.website/
-	# This ASCII pic can be found at
-	# https://asciiart.website/index.php?art=animals/birds%20(water)
-
-	N = findUniqueItems(A)
-	T = createTransactionFrequency(N, A)
-
-	R = [[] for i in range(6)]
-	R[0] = N #first element of R holds all the unique items
-
-	L = [[] for i in range(6)]
-	L[0] = T #First element of L holds the TID's associated with each unique item
-	printList(R,L,T,k)
-
-main()
 
 def associationSearch(R, L, s):
 	n = len(s)
@@ -171,13 +115,28 @@ def associationSearch(R, L, s):
 	query = []
 	queryIsFrequent = False
 	queryTransactionCount = 0
-	for i in range(len(R[n])):
-		if(compareLists(s, R[n][i])):
-			query = R[n][i]
-			queryIsFrequent = True
-			queryTransactionCount = len(L[n][i])
-			break
-
+	if(n == 1):
+		for i in range(len(R[n])):
+			if(s[0] == R[n][i]):
+				query = [R[n][i]]
+				queryIsFrequent = True
+				queryTransactionCount = len(L[n][i])
+				break
+	else:
+		for i in range(len(R[n])):
+			if(compareLists(s, R[n][i])):
+				query = R[n][i]
+				queryIsFrequent = True
+				queryTransactionCount = len(L[n][i])
+				break
+		
+	if(queryIsFrequent == False):
+		print(s, "not found in frequent itemsets.")
+		return
+	
+	print(query)
+	print(queryTransactionCount) # Number of baskets where you find s
+	
 	confidenceCount = []
 	#move up to the next level n+1	
 	for i in range(len(R[n+1])):
@@ -185,6 +144,67 @@ def associationSearch(R, L, s):
 		if(all(item in R[n+1][i] for item in query)):
 			#find all itemsets that have s
 			#record the length of the transaction id's that these itemsets have, calculate confidence
-			confidenceCount.append([R[n+1][i], len(L[n+1][i])/queryTransactionCount])
+			temp = "%.2f" % (len(L[n+1][i])*100/queryTransactionCount)
+			confidenceCount.append([R[n+1][i], temp])
+	if(len(confidenceCount)==0):
+		print("No associated items found.")
+		return
+	
+	print(confidenceCount)
 
-	print(confidenceCount)	
+
+def main():
+	A = importCSV('groceries.csv')
+	
+	k = int(input("Enter Support Percentage: "))
+	k = math.floor(k*len(A)/100) #k input is in percentage for the business minded ducks
+
+
+	# S              ,,, ::::::::::::..
+	# O          ,z$$$$$ :::::::::::::::::.
+	# H        e$$$$$$$$ ::::::::::::::::::::
+	# A      d$$$$$$$$$$;`::::::::::::::::::::
+	# M     ::."$$$$$$$$$ :::::::::::::::::::::
+	#      :::::."$$$$$$$ ::::::::::::::::::::
+	#     ::::::::."$$$$$b ::''''''''':::::::'
+	#     `:::::::::`$$P" . :''''<<<<<<;.  `'
+	#       `:::::::: "".,.----=--..`'<<<<<<;
+	#         `:::'',-'` .::::::::::`'- `<<<<;      .::.
+	#           `,-`.::::::::::'  .. `::.      .:::::::::
+	#         ,-'.:::::::::::' dMMMMMMx :::::` .`::::::::
+	#       ,'.::::::::::::: dMMMMMMMMMM ``` JMMM `:::::
+	# N   ,'.:::::::::::' . MMP',ccc "MMM Mb MMMMM `:::
+	# E  ; :::::::::::' nM MM',$$$$$$b "Mb4M,M c,`? :'
+	# I ; ::::::::::: xMMMMM'J$$$$$$$$b )MMMMM.`$$.
+	# L' :::`::::::: dMMMMM'J$$$$$$$$$$F MMMMMM $$$.
+	#    :: <`::::: JMMMMM',$$$$$$$$$$$P MMMMMM $$$$
+	#   `:::`bc,.. ,edMMMM $$$$$$$$$$$$F MMMMMM $$$$  .
+	#    ` ,nMMMMMMMMTMMMM P""?$$$$$$$$".MTT4MM ?$$F;P""?x_
+	#    ,d)MMMMMMP'dMMMMM      $$$$$$P  .cCc.    $   cCc L~
+	#     ,MMMMMMM ,c, 4MMr      $$$$$  .CCCC>   4   CCC> L"
+	# S   P)MMMMM> $$?$ "MM      $$$$"  CCCCC'   ,,  CC> % `
+	# I  ' MMMTMMM `b $$c.?b     $$$"   `CCC'-""___,,,,,__
+	# D    M"       `?, ??$c,,,,,,cc$7= _,cc$$$$PP"""""??$$$$
+	# D    "          `"b,_ "?$$$$$$$$$$P""'.. ,d"
+	# H                  `?$b `,,,,,,.`;;;;;;'j"
+	# A                   n ?$c`;;;;;;;`',;;; F
+	# R              ,;- ;MM "$b ;;;;;,,;;;'j"
+	# T          ,!!!!!  MMMM,`?$c,_`` _,,cd'
+	# H         !!!!!!!; MMMMMMn, `"""""''
+	# A      .  !!!!!!!!!, `"TT';!!!!>
+	#    ,;!!!> !!!!!!!!!!!!!   ` !!!!!!;;
+
+	N = findUniqueItems(A)
+	T = createTransactionFrequency(N, A)
+
+	R = []
+	R.append(N) #first element of R holds all the unique items
+	L = []
+	L.append(T)#First element of L holds the TID's associated with each unique item
+	printList(R,L,T,k)
+	
+	s= ['whole milk']
+	associationSearch(R, L, s)
+
+	
+main()
