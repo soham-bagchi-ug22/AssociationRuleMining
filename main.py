@@ -1,6 +1,7 @@
 import csv
 import collections
 import math
+from tabulate import tabulate
 
 def importCSV(file):
 	with open(file, 'r') as groceries_obj:
@@ -150,13 +151,20 @@ def associationSearch(R, L, s):
 		print("No associated items found.")
 		return
 	
-	print(confidenceCount)
-
+	#print(confidenceCount)
+	print(tabulate(confidenceCount, headers=['Itemsets', 'Confidence']))
+""" 
+def generateAssociationData(R, L):
+	allAssociationData = []
+	for i in range(len(R)):
+		associationData
+		for j in range(len(R[i])):
+ """
 
 def main():
 	A = importCSV('groceries.csv')
 	
-	k = int(input("Enter Support Percentage: "))
+	k = float(input("Enter Support Percentage: "))
 	k = math.floor(k*len(A)/100) #k input is in percentage for the business minded ducks
 
 
@@ -203,7 +211,7 @@ def main():
 	L.append(T)#First element of L holds the TID's associated with each unique item
 	printList(R,L,T,k)
 	
-	s= ['whole milk']
+	s = ['whole milk']
 	associationSearch(R, L, s)
 
 	
