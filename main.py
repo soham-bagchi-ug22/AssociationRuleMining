@@ -2,6 +2,7 @@ import csv
 import collections
 import math
 from tabulate import tabulate
+import upsetplot
 
 def importCSV(file):
 	with open(file, 'r') as groceries_obj:
@@ -66,6 +67,8 @@ def checkDuplicates(P, T):
 
 						
 def getLevels(R,L,k):
+	print(R[0][0])
+	print(L[0][0])
 	n = 1
 	while(1 != 0):
 		tempR = []
@@ -145,21 +148,16 @@ def associationSearch(R, L, s):
 		if(all(item in R[n+1][i] for item in query)):
 			#find all itemsets that have s
 			#record the length of the transaction id's that these itemsets have, calculate confidence
-			temp = "%.2f" % (len(L[n+1][i])*100/queryTransactionCount)
-			confidenceCount.append([R[n+1][i], temp])
+			confPerc = "%.2f" % (len(L[n+1][i])*100/queryTransactionCount)
+			itemSetWhole = R[n+1][i]
+			itemSetAssociation = [item for item in itemSetWhole if item not in query]
+			confidenceCount.append([query, "->", itemSetAssociation, confPerc])
 	if(len(confidenceCount)==0):
 		print("No associated items found.")
 		return
 	
 	#print(confidenceCount)
-	print(tabulate(confidenceCount, headers=['Itemsets', 'Confidence']))
-""" 
-def generateAssociationData(R, L):
-	allAssociationData = []
-	for i in range(len(R)):
-		associationData
-		for j in range(len(R[i])):
- """
+	print(tabulate(confidenceCount, headers=['Query Itemset', '' ,'Item', 'Confidence']))
 
 def main():
 	A = importCSV('groceries.csv')
